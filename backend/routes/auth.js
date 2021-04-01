@@ -7,8 +7,8 @@ const verifyToken = require('./verifyToken');
 const verifyCoach = require('./verifyCoach');
 
 // Register - Only a 'COACH' can can register a new 'USER'/new 'COACH' to the system.
-//router.post('/register', verifyToken, verifyCoach('COACH'), async (req, res) => {
-router.post('/register', async (req, res) => {
+router.post('/register', verifyToken, verifyCoach('COACH'), async (req, res) => {
+//router.post('/register', async (req, res) => {
     // User validation before create a user.
     const {error} = registerValidation(req.body);
     if(error) return res.status(400).send(error.details[0].message);
@@ -30,10 +30,12 @@ router.post('/register', async (req, res) => {
         email: req.body.email,
         firstName: req.body.firstName,
         lastName: req.body.lastName,
-        dateOfBirth: req.body.dateOfBirth,
+        phoneNumber: req.body.phoneNumber,
         password: hashedPassword,
+        dateOfBirth: req.body.dateOfBirth,
         registrationDate: req.body.registrationDate,
         role: req.body.role,
+        gender: req.body.gender,
         trainingPricesPerHour: req.body.trainingPricesPerHour,
         notes: req.body.notes,
     });
