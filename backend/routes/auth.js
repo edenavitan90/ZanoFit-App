@@ -1,10 +1,13 @@
 const router = require('express').Router();
-const User = require('../models/user.model');
-const {registerValidation, loginValidation} = require('../validation');
 const bcryptjs = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+
+// Imports Routes:
 const verifyToken = require('./verifyToken');
-const verifyCoach = require('./verifyCoach');
+const {registerValidation, loginValidation} = require('../validation');
+const User = require('../models/user.model');
+const verifyCoach = require('./user/coach/verifyCoach');
+
 
 // Register - Only a 'COACH' can can register a new 'USER'/new 'COACH' to the system.
 router.post('/register', verifyToken, verifyCoach('COACH'), async (req, res) => {
@@ -36,7 +39,7 @@ router.post('/register', verifyToken, verifyCoach('COACH'), async (req, res) => 
         registrationDate: req.body.registrationDate,
         role: req.body.role,
         gender: req.body.gender,
-        trainingPricesPerHour: req.body.trainingPricesPerHour,
+        trainingPricePerHour: req.body.trainingPricePerHour,
         notes: req.body.notes,
     });
     try{
@@ -50,21 +53,51 @@ router.post('/register', verifyToken, verifyCoach('COACH'), async (req, res) => 
 
 // Login
 router.post('/login', async (req, res) => {
-    // User validation before create a user.
-    const {error} = loginValidation(req.body);
-    if(error) return res.status(400).send(error.details[0].message);
+    try{
+        // User validation before create a user.
+        const {error} = loginValidation(req.body);
+        if(error) return res.status(400).send(error.details[0].message);
 
-    // Checking if the email exists.
-    const user = await User.findOne({email: req.body.email});
-    if(!user) return res.status(400).send('This "email" is not found.');
+        // Checking if the email exists.
+        const user = await User.findOne({email: req.body.email});
+        if(!user) return res.status(400).send('This "email" is not found.');
 
-    // Checking if the password is correct.
-    const validPassword = await bcryptjs.compare(req.body.password, user.password);
-    if(!validPassword) return res.status(400).send('Invalid password');
+        // Checking if the password is correct.
+        const validPassword = await bcryptjs.compare(req.body.password, user.password);
+        if(!validPassword) return res.status(400).send('Invalid password');
 
-    // Create and assign a token.
-    const token = jwt.sign({ _id: user._id }, process.env.TOKEN_SECRET);
-    res.header('auth-token').send(token);
+        // Create and assign a token.
+        const token = jwt.sign({ _id: user._id }, process.env.TOKEN_SECRET);
+        //res.header('auth-token').send(token);
+        res.status(201).header('auth-token', token).send({token: token});
+
+    } catch (err){
+        res.status(400).send(err);
+    }
+});
+
+// Check if the (which) user isLoggedIn (the token has already been authenticated, but now we will find the user)
+router.get('/isLoggedIn', verifyToken, async (req, res) => {
+//router.get('/isLoggedIn', async (req, res) => {
+
+    const token = req.header('auth-token');
+    const decodedToken = jwt.decode(token);
+    
+    try{
+        // Searching the user with the same token.
+        const user = await User.findOne(
+            { _id: decodedToken._id }, // Find by _id
+            { password:0 }); // The field "password" will not be returned.
+        if(!user) return res.status(400).send('User not found');
+
+        res.send({
+            'auth-token': token,
+            'isLoggedIn': true,
+            user: user
+        });
+    } catch (err){
+        res.status(400).send(err);
+    }
 });
 
 module.exports = router;

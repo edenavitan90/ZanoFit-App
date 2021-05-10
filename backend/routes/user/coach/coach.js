@@ -1,9 +1,9 @@
 const router = require('express').Router();
-const User = require('../models/user.model');
-const verifyToken = require('./verifyToken');
-const verifyCoach = require('./verifyCoach');
+const User = require('../../../models/user.model');
+const verifyToken = require('../../verifyToken');
+const verifyCoach = require('../../user/coach/verifyCoach');
 
-router.get('/', verifyToken, verifyCoach('COACH'),(req, res)=> {
+router.get('/', verifyToken, verifyCoach('COACH'), (req, res)=> {
     User.find()
         .then(users => res.json(users))
         .catch(err => res.status(400).json(`Error: ${err}`));

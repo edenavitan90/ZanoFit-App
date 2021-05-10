@@ -44,7 +44,7 @@
             default: 'TRAINEE',
             required: true
         },
-        trainingPricesPerHour: {
+        trainingPricePerHour: {
             type: Number
         },
         gender: {

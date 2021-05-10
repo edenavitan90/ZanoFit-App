@@ -1,4 +1,5 @@
-import React, { Component } from 'react';
+import { Button } from 'bootstrap';
+import React, { Component, useContext } from 'react';
 import { Link } from 'react-router-dom';
 
 
@@ -13,25 +14,33 @@ export default class Navbar extends Component {
           <ul className="navbar-nav mr-auto">
             
             <li className="navbar-item">
-            <Link to="/coach" className="nav-link">Coach</Link>
+              <Link to="/user" className="nav-link">User</Link>
             </li>
 
             <li className="navbar-item">
-            <Link to="/coach/users" className="nav-link">CoachUsers</Link>
+              <Link to="/coach" className="nav-link">Coach</Link>
             </li>
 
             <li className="navbar-item">
-            <Link to="/coach/register" className="nav-link">CoachRegister</Link>
+              <Link to="/coach/users" className="nav-link">CoachUsers</Link>
             </li>
 
             <li className="navbar-item">
-            <Link to="/user/login" className="nav-link">Login</Link>
+              <Link to="/coach/register" className="nav-link">CoachRegister</Link>
+            </li>
+
+            <li className="navbar-item">
+              <Link to="/user/login" className="nav-link">Login</Link>
             </li>
             
             <li className="navbar-item">
-            <Link to="/user/register" className="nav-link">Register</Link>
+              <Link to="/user/register" className="nav-link">Register</Link>
             </li>
         
+            {/* <li className="navbar-item login" id="login">
+              <button className="btn btn-primary btn-block" onLoad={}>isLoggedIn: false</button>
+            </li> */}
+
           </ul>
           </div>
         </nav>

@@ -11,7 +11,7 @@ const registerValidation = data => {
         dateOfBirth: Joi.date().required(),
         registrationDate: Joi.date().required(),
         role: Joi.string().required(),
-        trainingPricesPerHour: Joi.number().integer().min(0),
+        trainingPricePerHour: Joi.number().integer().min(0),
         gender: Joi.string().required(),
         notes: Joi.array().items(Joi.string())
     }); 

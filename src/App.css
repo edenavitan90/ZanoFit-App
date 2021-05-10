@@ -36,3 +36,10 @@
     transform: rotate(360deg);
   }
 }
+
+.login{
+  text-align: left;
+  color: red;
+  text-decoration-color: red;
+}
+

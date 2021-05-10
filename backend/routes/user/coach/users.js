@@ -1,6 +1,6 @@
 const router = require('express').Router();
-const User = require('../models/user.model');
-const verifyToken = require('./verifyToken');
+const User = require('../../../models/user.model');
+const verifyToken = require('../../verifyToken');
 const verifyCoach = require('./verifyCoach');
 
 // Gets all the users that NOT coaches.

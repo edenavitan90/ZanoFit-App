@@ -1,4 +1,4 @@
-const User = require('../models/user.model');
+const User = require('../../../models/user.model');
 
 // Middleware function to check if the user is also a coach.
 module.exports = function(role) {
