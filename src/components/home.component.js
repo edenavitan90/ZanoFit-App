@@ -5,7 +5,9 @@ export default class Home extends Component{
         return(
             <div>
                 <p>You are on the Home component</p>
+                <p>Token: {sessionStorage.getItem('auth-token')}</p>
             </div>
+
         )
     }
 }
