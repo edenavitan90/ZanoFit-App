@@ -47,13 +47,23 @@
         trainingPricePerHour: {
             type: Number
         },
-        gender: {
-            type: String,
-            enum: ['MALE', 'FEMALE'],
-            required: true
-        },
         notes: {
             type: [String],
+        },
+        physicalDetails: {
+            gender: {
+                type: String,
+                enum: ['MALE', 'FEMALE'],
+                required: true
+            },
+            height:{
+                type: Number,
+                required: true
+            },
+            weight:{
+                type: Number,
+                required: true
+            }
         }
     },{
         timestamps: true,

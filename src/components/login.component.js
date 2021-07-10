@@ -1,48 +1,63 @@
 //import React, {Component, useState,useContext, createContext } from 'react';
 import axios from 'axios';
-import { Route, Redirect } from 'react-router'
+//import { Route, Redirect } from 'react-router'
 import React, {Component} from 'react';
 import { Link } from 'react-router-dom';
 import Card from 'react-bootstrap/Card';
 import ListGroup from 'react-bootstrap/ListGroup';
+import Button from 'react-bootstrap/Button'
 
 //import React, { useState } from "react";
-import { TextField, Typography, Button } from "@material-ui/core";
 //import { connect } from "react-redux";
-//import { login } from "../actions/auth";
-//import { login } from "../../backend/routes/auth";
-import MuiAlert from "@material-ui/lab/Alert";
+import reactDom from 'react-dom';
 
 export default class Login extends Component{
     
   handleLoginSubmit = (e) => {
       e.preventDefault();
-
+      
+      let emailAsterisk = document.getElementById("emailAsterisk");
+      let passwordAsterisk = document.getElementById("passwordAsterisk");
+      reactDom.findDOMNode(emailAsterisk).style.visibility = this.email === undefined ? "visible" : "hidden";
+      reactDom.findDOMNode(passwordAsterisk).style.visibility = this.password === undefined ? "visible" : "hidden";
+      if(this.email === undefined || this.password === undefined){
+        alert("מלא את כל הפרטים לביצוע ההתחברות.");
+        return;
+      }
+      
       const data = {
-          email: this.email,
-          password: this.password
+        email: this.email,
+        password: this.password
       };
-      console.log(data);
-
+      //console.log(data);
       axios.post('http://localhost:5000/user/login', data)
       .then(res => { 
-        console.log(res.data);
-        
         sessionStorage.setItem('isLoggedIn', true);
         sessionStorage.setItem('auth-token', res.data.token);
-        sessionStorage.setItem('user-firstName', res.data.firstName);
-        sessionStorage.setItem('user-lastName', res.data.lastName);
-        sessionStorage.setItem('user-role', res.data.role);
-        
-        //const userFirstName = sessionStorage.getItem('user-firstName');
-        //const userLastName = sessionStorage.getItem('user-lastName');
-        
-        //console.log(userFirstName);
-        //console.log(userLastName);
+        sessionStorage.setItem('user', JSON.stringify(res.data.user));
 
+        /* sessionStorage.setItem('user-firstName', res.data.firstName);
+        sessionStorage.setItem('user-lastName', res.data.lastName);
+        sessionStorage.setItem('user-role', res.data.role); */
         return window.location = '/home';
       })     
-      .catch(err => { console.log(err)})
+      .catch(error => {
+        if (error.response) {
+          // The request was made and the server responded with a status code.
+          alert(error.response.data);
+          console.log(error.response.data);
+          console.log(error.response.status);
+          console.log(error.response.headers);
+        } 
+        else if (error.request) {
+          // The request was made but no response was received, `error.request`.
+          console.log(error.request);
+        } 
+        else {
+          // Something happened in setting up the request and triggered an Error
+          console.log('Error', error.message);
+        }
+      })
   };
   
   render(){
@@ -52,29 +67,40 @@ export default class Login extends Component{
       display: "flex",
       justifyContent: "center",
     };
-    if(!this.props.user.isLoggedIn){
+    if(!this.props.userdetails.isLoggedIn){
       return(
-        <form onSubmit = {this.handleLoginSubmit}>
-            <h3>Login:</h3>
-
-            <div className="from-group">
-                <label>Email</label>
-                <input type="email" className="from-control" placeholder="Email"
-                        onChange = {e => this.email = e.target.value} />
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title">Please Log In</h4>
             </div>
-
-            <div className="from-group">
-                <label>Password</label>
-                <input type="password" className="from-control" placeholder="Password"
-                        onChange = {e => this.password = e.target.value} />
-            </div>
-
-            <button className="btn btn-primary btn-block">Login</button>
-        </form>
+            <Card style={{ width: '100%' }}>
+              <Card.Img variant="top" src=""/>
+              <ListGroup className="list-group-flush">
+                <form /* onSubmit={this.handleLoginSubmit} */ style={{margin:'25px'}}>
+                  <div style={{margin:'10px'}}>
+                    <div className="form-group" style={{margin:'10px'}}>
+                      <label id="emailAsterisk" style={{color:"red", fontWeight: 'bold', marginRight: "5px", visibility: "hidden"}}>* </label>
+                      <label >Email</label>
+                      <input type="email" className="col form-control" placeholder="Email" onChange = {e => this.email = e.target.value} style={{float: 'right', width: '80%'}}/>
+                    </div>
+                    <div className="form-group" style={{margin:'10px'}}>
+                      <label id="passwordAsterisk" style={{color:"red", fontWeight: 'bold', marginRight: "5px", visibility: "hidden"}}>* </label>
+                      <label>Password</label>
+                      <input type="password" className="form-control" placeholder="Password" onChange = {e => this.password = e.target.value} style={{float: 'right', width: '80%'}}/>
+                    </div>
+                  </div>
+                  {/* <button className="btn btn-primary btn-block" style={buttonStyle}>Log In</button> */}
+                  <Button variant="danger" onClick={this.handleLoginSubmit} /* className="btn btn-primary btn-block" */  style={{width:'100%', marginTop:'10px'}}>Log In</Button>{' '}
+                </form>
+              </ListGroup>
+            </Card>                                      
+          </div>
+        </div>
       );
     }
     else{
-      const fullName = `${this.props.user.firstName} ${this.props.user.lastName}`
+      const fullName = `${this.props.userdetails.user.firstName} ${this.props.userdetails.user.lastName}`
       return(
         <div>
           <div>
@@ -98,8 +124,6 @@ export default class Login extends Component{
     } 
   }
 }
-
-
 
 
 // ----------------------------------------------------------------------------------

@@ -1,4 +1,5 @@
 const router = require('express').Router();
+const { json } = require('express');
 const User = require('../../../models/user.model');
 const verifyToken = require('../../verifyToken');
 const verifyCoach = require('./verifyCoach');
@@ -16,5 +17,21 @@ router.get('/coaches', verifyToken, verifyCoach('COACH'),(req, res)=> {
         .then(users => res.json(users))
         .catch(err => res.status(400).json(`Error: ${err}`));
 });
+
+
+router.get('/users', verifyToken, verifyCoach('COACH'), async (req, res) => {
+    try{
+        const users = await User.find();
+        res.status(200).send(users);
+    } catch (err){
+        res.status(400).send(err);
+    }
+});
+
+router.delete('/delete-user', verifyToken, verifyCoach('COACH'), async (req, res) => {
+    User.deleteOne({email: req.body.email})
+        .then(thing => res.status(200).send({ message : 'O-K'}))
+        .catch(err => res.status(400).send(err));
+});// `The user: ${req.body.firstName} ${req.body.lastName} has been deleted.`
 
 module.exports = router;

@@ -8,10 +8,10 @@ const {registerValidation, loginValidation} = require('../validation');
 const User = require('../models/user.model');
 const verifyCoach = require('./user/coach/verifyCoach');
 
-
 // Register - Only a 'COACH' can can register a new 'USER'/new 'COACH' to the system.
 router.post('/register', verifyToken, verifyCoach('COACH'), async (req, res) => {
 //router.post('/register', async (req, res) => {
+    
     // User validation before create a user.
     const {error} = registerValidation(req.body);
     if(error) return res.status(400).send(error.details[0].message);
@@ -19,11 +19,11 @@ router.post('/register', verifyToken, verifyCoach('COACH'), async (req, res) => 
     // Checking if the email already used before 
     const emailExist = await User.findOne({email: req.body.email});
     if(emailExist) return res.status(400).send('This "email" already exists.');
-
+    
     // Checking if the name already used before: The combination of first name and last name together.
     const nameExist = await User.findOne({firstName: req.body.firstName, lastName: req.body.lastName});
     if(nameExist) return res.status(400).send('This "name" ("First Name" & "Last Name") already exists.');
-
+    
     // Hash password 
     const salt = await bcryptjs.genSalt(10);
     const hashedPassword = await bcryptjs.hash(req.body.password, salt);
@@ -37,16 +37,22 @@ router.post('/register', verifyToken, verifyCoach('COACH'), async (req, res) => 
         password: hashedPassword,
         dateOfBirth: req.body.dateOfBirth,
         registrationDate: req.body.registrationDate,
-        role: req.body.role,
-        gender: req.body.gender,
+        role: req.body.role, // 
         trainingPricePerHour: req.body.trainingPricePerHour,
-        notes: req.body.notes,
+        notes: req.body.notes,  // 
+        physicalDetails: {
+            gender: req.body.physicalDetails.gender,
+            height: req.body.physicalDetails.height,
+            weight: req.body.physicalDetails.weight,
+        }
     });
     try{
         const savedUser = await user.save();
         res.send(savedUser);
+        //res.format.status(200).send(savedUser); // Try This!!!
     } 
     catch(err){
+        console.log("error");
         res.status(400).send(err);
     }
 });
@@ -64,15 +70,11 @@ router.post('/login', async (req, res) => {
 
         // Checking if the password is correct.
         const validPassword = await bcryptjs.compare(req.body.password, user.password);
-        if(!validPassword) return res.status(400).send('Invalid password');
+        if(!validPassword) return res.status(400).send('Incorrect password');
 
         // Create and assign a token.
         const token = jwt.sign({ _id: user._id }, process.env.TOKEN_SECRET)
         
-        //console.log(req.body);
-        //console.log(token);
-        //res.header('auth-token').send(token);
-        //res.status(201).header('auth-token', token).send({token: token});
         res.status(201).header({
             'auth-token': token,
             'user-firstName': user.firstName,
@@ -80,9 +82,10 @@ router.post('/login', async (req, res) => {
             'role': user.role
         }).send({
             token: token,
-            firstName: user.firstName,
+            user: user
+            /* firstName: user.firstName,
             lastName: user.lastName, 
-            role: user.role
+            role: user.role */
         });
 
     } catch (err){

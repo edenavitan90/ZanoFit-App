@@ -1,18 +1,20 @@
-import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
-//import { }
+import React, {Component} from 'react';
+import NotAuthorizedAlert from '../alerts/NotAuthorizedAlert.component.js';
+import PageNotFoundAlert from '../alerts/PageNotFoundAlert.component.js';
 
 export default class User extends Component{
-    constructor(props) {
-        super(props);
-
-    }
-    
     render(){
-        return(
-            <div>
-                <p>You are on the User component</p>
-            </div>
-        )
+        if(!this.props.userdetails.isLoggedIn){
+            return(
+                <PageNotFoundAlert/>
+            );
+        }
+        else{
+            return(
+                <div>
+                    <p>You are on the User component</p>
+                </div>
+            )
+        }
     }
 }

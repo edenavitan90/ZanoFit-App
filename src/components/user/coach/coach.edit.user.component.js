@@ -1,10 +1,10 @@
 import React, {Component} from 'react';
 
-export default class Register extends Component{
+export default class EditUser extends Component{
     render(){
         return(
             <div>
-                <p>You are on the Register component</p>
+                <p>You are on the EditUser component</p>
             </div>
         )
     }
