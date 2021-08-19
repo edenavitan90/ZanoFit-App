@@ -21,7 +21,7 @@ router.get('/coaches', verifyToken, verifyCoach('COACH'),(req, res)=> {
 
 router.get('/users', verifyToken, verifyCoach('COACH'), async (req, res) => {
     try{
-        const users = await User.find();
+        const users = await User.find().sort({role: 1});
         res.status(200).send(users);
     } catch (err){
         res.status(400).send(err);

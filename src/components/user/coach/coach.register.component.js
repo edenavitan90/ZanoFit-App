@@ -1,18 +1,9 @@
 import React, {Component} from 'react';
 import axios from 'axios';
-//import Card from 'react-bootstrap/Card';
-//import ListGroup from 'react-bootstrap/ListGroup';
-//import { Link } from 'react-router-dom';
-//import { date } from '@hapi/joi';
-//import ReactTooltip from "react-tooltip";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Button from 'react-bootstrap/Button';
-//import notAuthorizedAlert from '../alerts/notAuthorizedAlert.component.js';
 import NotAuthorizedAlert from '../../alerts/NotAuthorizedAlert.component.js';
 import PageNotFoundAlert from '../../alerts/PageNotFoundAlert.component.js';
-//import { Alert } from '@material-ui/lab';
-//import backgroundImage from '../../../images/logo.png'
-//import { Icon } from 'semantic-ui-react'
 import { VscNote } from "react-icons/vsc";
 import { AiOutlinePhone, AiOutlineMail } from "react-icons/ai";
 
@@ -30,22 +21,6 @@ export default class CoachRegister extends Component {
   handleRegisterSubmit = (e) => {
     e.preventDefault();
     
-   /*  let emailAsterisk = document.getElementById("emailAsterisk");
-    let passwordAsterisk = document.getElementById("passwordAsterisk");
-    reactDom.findDOMNode(emailAsterisk).style.visibility = this.email === undefined ? "visible" : "hidden";
-    reactDom.findDOMNode(passwordAsterisk).style.visibility = this.password === undefined ? "visible" : "hidden"; */
-    
-    // Fetch all the forms we want to apply custom Bootstrap validation styles to
-    //const forms = document.querySelectorAll('.needs-validation');
-    
-    
-    /* const forms = document.getElementsByTagName('form');
-  
-    Array.prototype.slice.call(forms).forEach((form) => {
-      
-        alert(form);
-    }); */
-
     if(this.confirmPassword.trim() !== this.password.trim()){
       alert("סיסמאות חייבות להיות תואמות");
       return;
@@ -122,7 +97,7 @@ export default class CoachRegister extends Component {
       }
       else if(this.props.userdetails.user.role === "COACH"){
         return(
-            <div className="modal-content" style={{background: 'rgba(255, 255, 255, 0.8)'}} /* style={{ backgroundImage: `url(${backgroundImage})rgba(255, 51, 51, 0.5)`, height:"1000px", backgroundRepeat: "no-repeat",backgroundPosition: "center", backgroundSize: "cover", background: ''}} */>
+            <div className="modal-content" style={{background: 'rgba(255, 255, 255, 0.8)'}}>
               
               <div className="modal-header">
                 <h4 className="modal-title">Registration</h4>
@@ -219,11 +194,6 @@ export default class CoachRegister extends Component {
                       <input type="number" step="0.5" className="form-control" min="0" placeholder="Price" onChange = {e => this.trainingPricePerHour = e.target.value}/>
                     </div>
                       
-                    {/* <div className="form-group" style={{margin:'0px', marginTop:'40px'}}>
-                      <label>&nbsp;&nbsp;Physical Details:</label>
-                    </div> */}
-
-                    {/* <div className="form-row"> */}
                     <div className="col-md-2" style={{padding:'5px'}}>
                       <label id="GenderAsterisk" style={{color:"red", fontWeight: 'bold', marginRight: "5px", visibility: "hidden"}}>* </label>
                       <label>Gender</label>

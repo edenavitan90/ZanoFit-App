@@ -1,14 +1,9 @@
-//import React, {Component, useState,useContext, createContext } from 'react';
 import axios from 'axios';
-//import { Route, Redirect } from 'react-router'
 import React, {Component} from 'react';
 import { Link } from 'react-router-dom';
 import Card from 'react-bootstrap/Card';
 import ListGroup from 'react-bootstrap/ListGroup';
-import Button from 'react-bootstrap/Button'
-
-//import React, { useState } from "react";
-//import { connect } from "react-redux";
+import Button from 'react-bootstrap/Button';
 import reactDom from 'react-dom';
 
 export default class Login extends Component{
@@ -77,7 +72,7 @@ export default class Login extends Component{
             <Card style={{ width: '100%' }}>
               <Card.Img variant="top" src=""/>
               <ListGroup className="list-group-flush">
-                <form /* onSubmit={this.handleLoginSubmit} */ style={{margin:'25px'}}>
+                <form style={{margin:'25px'}}>
                   <div style={{margin:'10px'}}>
                     <div className="form-group" style={{margin:'10px'}}>
                       <label id="emailAsterisk" style={{color:"red", fontWeight: 'bold', marginRight: "5px", visibility: "hidden"}}>* </label>
@@ -90,8 +85,7 @@ export default class Login extends Component{
                       <input type="password" className="form-control" placeholder="Password" onChange = {e => this.password = e.target.value} style={{float: 'right', width: '80%'}}/>
                     </div>
                   </div>
-                  {/* <button className="btn btn-primary btn-block" style={buttonStyle}>Log In</button> */}
-                  <Button variant="danger" onClick={this.handleLoginSubmit} /* className="btn btn-primary btn-block" */  style={{width:'100%', marginTop:'10px'}}>Log In</Button>{' '}
+                  <Button variant="danger" onClick={this.handleLoginSubmit} style={{width:'100%', marginTop:'10px'}}>Log In</Button>{' '}
                 </form>
               </ListGroup>
             </Card>                                      
@@ -124,96 +118,3 @@ export default class Login extends Component{
     } 
   }
 }
-
-
-// ----------------------------------------------------------------------------------
-/* function Alert(props) {
-    return <MuiAlert elevation={6} variant="filled" {...props} />;
-}
-
-export default connect(null, { login })(props => {
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    const [error, setError] = useState("");
-  
-    const submitForm = () => {
-      if (email === "" || password === "") {
-        setError("Fields are required");
-        return;
-      }
-      props.login({ email, password });
-    };
-
-    return (
-        <form>
-          <Typography variant="h5" style={{ marginBottom: 8 }}>
-            Login
-          </Typography>
-          <TextField label="Email" variant="outlined" fullWidth className="form-input" value={email}
-                    onChange={e => setEmail(e.target.value)} />
-          <TextField
-            label="Password"
-            variant="outlined"
-            fullWidth
-            className="form-input"
-            type="password"
-            value={password}
-            onChange={e => setPassword(e.target.value)}
-          />
-          <Button
-            variant="contained"
-            color="primary"
-            fullWidth
-            className="form-input"
-            size="large"
-            onClick={submitForm}
-          >
-            Login
-          </Button>
-    
-          {error && (
-            <Alert severity="error" onClick={() => setError(null)}>
-              {props.error || error}
-            </Alert>
-          )}
-        </form>
-      );
-    });
- */
-// ==========================================================================================
-
-// ----------------------------------------------------------------------------------
-/* import React, { Component } from "react";
-
-export default class Login extends Component {
-    render() {
-        return (
-            <form>
-                <h3>Sign In</h3>
-
-                <div className="form-group">
-                    <label>Email address</label>
-                    <input type="email" className="form-control" placeholder="Enter email" />
-                </div>
-
-                <div className="form-group">
-                    <label>Password</label>
-                    <input type="password" className="form-control" placeholder="Enter password" />
-                </div>
-
-                <div className="form-group">
-                    <div className="custom-control custom-checkbox">
-                        <input type="checkbox" className="custom-control-input" id="customCheck1" />
-                        <label className="custom-control-label" htmlFor="customCheck1">Remember me</label>
-                    </div>
-                </div>
-
-                <button type="submit" className="btn btn-primary btn-block">Submit</button>
-                <p className="forgot-password text-right">
-                    Forgot <a href="#">password?</a>
-                </p>
-            </form>
-        );
-    }
-} */
-// ==========================================================================================

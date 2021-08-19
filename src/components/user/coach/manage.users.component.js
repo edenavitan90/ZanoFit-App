@@ -5,10 +5,10 @@ import Col from 'react-bootstrap/Col';
 import { Link } from 'react-router-dom';
 
 // components
-import User from './coach.users.component.js';
+import Users from './coach.users.component.js';
 import Coach from '../coach/coach.component';
-//import UsersTable from '../../structures/tables/users.table.component'
 import CoachRegister from './coach.register.component.js';
+
 // style 
 import '../../../css_style/VerticalNavbarStyle.css';
 import NotAuthorizedAlert from '../../alerts/NotAuthorizedAlert.component';
@@ -78,7 +78,7 @@ function RenderManageUsersComponent(props) {
     if(props.mode === "Users"){
         return (
               <div>
-                <User target={"UsersTable"} userdetails={props.userdetails}/>
+                <Users target={"UsersTable"} userdetails={props.userdetails}/>
             </div>
         );
     }

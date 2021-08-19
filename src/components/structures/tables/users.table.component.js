@@ -1,38 +1,9 @@
 import React, { Component, useState } from 'react';
-
-
 import Table from 'react-bootstrap/Table';
-
-
 import "bootstrap";
-import Collapsible from 'react-collapsible';
 import { VscTrash, VscEdit } from "react-icons/vsc";
-//import Collapse from 'react-bootstrap/Collapse';
-//import Button from 'react-bootstrap/Button';
-
-//import { Link } from 'react-router-dom';
 import axios from 'axios';
-
-
-//////////////////////
-/* import PropTypes from 'prop-types';
-import { makeStyles } from '@material-ui/core/styles';
-import Box from '@material-ui/core/Box';
-import Collapse from '@material-ui/core/Collapse';
-import IconButton from '@material-ui/core/IconButton';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableContainer from '@material-ui/core/TableContainer';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import Typography from '@material-ui/core/Typography';
-import Paper from '@material-ui/core/Paper';
-import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
-import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp'; */
-//////////////////////
-
-
+import moment from 'moment';
 // style 
 import '../../../css_style/VerticalNavbarStyle.css';
 
@@ -40,7 +11,7 @@ export default class UsersTable extends Component {
     render() {
         return (
             <div>
-                <CreateTable users={this.props.users}/>
+                <CreateTable users={this.props.users} userdetails={this.props.userdetails}/>
             </div>
         )
     }
@@ -52,7 +23,7 @@ function CreateTable(props) {
             <Table responsive="xl" striped bordered hover className="table table-dark" id=''>
                 <RenderTableHeader/>
                 <tbody>
-                    <RenderTableData users={props.users}/>
+                    <RenderTableData users={props.users} userdetails={props.userdetails}/>
                 </tbody>
             </Table>
         </div>
@@ -64,9 +35,11 @@ function RenderTableHeader() {
         <thead>
             <tr>
                 <th>No.</th>
-                <th>Name</th>
+                <th>Full Name</th>
                 <th>Email</th>
                 <th>Phone Number</th>
+                <th>Registration Date</th>
+                <th>Age</th>
                 <th>Role</th>
                 <th></th>
             </tr>
@@ -76,19 +49,25 @@ function RenderTableHeader() {
  
 function RenderTableData(props) {
     return props.users.map((user, index) => {
-        const { firstName, lastName, email, phoneNumber, role } = user // destructuring
+        const { firstName, lastName, email, phoneNumber, registrationDate, dateOfBirth, role } = user // destructuring
         return (
             <tr key={email}>
-                <th className="btn" style={{display:"flex", justifyContent:"center", color:"white"}}>
-                    {index+1}
+                <th style={{color:"white"}}>
+                    {index + 1}
                 </th>
                 <td>{firstName + " " + lastName}</td>
                 <td>{email}</td>
                 <td>{phoneNumber}</td>
-                <td>{role}</td>
+                {/* <td>{registrationDate.format('dd/mm/yy')}</td> 
+                <td>{(new Date(registrationDate)).format('JER')}</td>*/}
+                <td>{moment(registrationDate).format("DD/MM/YYYY")} -- {( moment(new Date()).diff(registrationDate, 'days') / 365 ).toFixed(1)} years</td>
+                <td>{( moment(new Date()).diff(dateOfBirth, 'days') / 365 ).toFixed(1)}</td>
+                <td>{role[0].toUpperCase() + role.slice(1).toLowerCase()}</td>
                 <td style={{padding:"8px"}}>
                     <VscEdit type="button" onClick={deleteUser} style={{color:"white", margin:"6px"}}/>
-                    <VscTrash id={email} type="button" onClick={(e) => askForDeleteUser(e, user)} style={{color:"white", margin:"6px"}}/>
+                    {props.userdetails.user.email != email ? 
+                    <VscTrash id={email} type="button" onClick={(e) => askForDeleteUser(e, user)} style={{color:"white", margin:"6px"}}/> : 
+                    <VscTrash id={email} type="button" style={{color:"gray", margin:"6px", cursor:'not-allowed'}}/> }
                 </td>
             </tr>
         )

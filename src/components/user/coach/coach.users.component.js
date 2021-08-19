@@ -4,10 +4,7 @@ import axios from 'axios';
 import UsersTable from '../../structures/tables/users.table.component';
 import NotAuthorizedAlert from '../../alerts/NotAuthorizedAlert.component';
 import PageNotFoundAlert from '../../alerts/PageNotFoundAlert.component.js';
-
-//import { Link } from 'react-router-dom';
-
-//import { }
+import Loader from "react-loader-spinner";
 
 export default class Users extends Component{
     constructor(props){
@@ -19,7 +16,6 @@ export default class Users extends Component{
     }
 
     async componentDidMount() {
-    //async getUsersData() {
         axios.get('http://localhost:5000/user/coach/users', {
             headers: {
                 'auth-token': sessionStorage.getItem('auth-token')
@@ -34,11 +30,10 @@ export default class Users extends Component{
                     <div className="modal-header">
                         <h3 className="modal-title">Users View</h3>
                     </div>
-                    <UsersTable users={this.state.users}/>
+                    <UsersTable users={this.state.users} userdetails={this.props.userdetails} style={{overflow: 'auto'}}/>
                 </div>    
             );
             ReactDOM.render(element, document.getElementById('UsersTable'))
-            //ReactDOM.render(element, document.getElementById(this.props.target))
         })     
         .catch(error => {
             if (error.response) {
@@ -61,7 +56,9 @@ export default class Users extends Component{
     render(){
         return(
             <div>
-                <div id="UsersTable"></div>
+                <div id="UsersTable" style={{display:'flex', justifyContent:'center'}}>
+                    <Loader type="BallTriangle" color="#dc3545" height={80} width={80} />
+                </div>
             </div>
         )
     }
