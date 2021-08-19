@@ -34,5 +34,4 @@ app.use('/user/coach', coachUsersRouter);
 app.use('/posts', postRouter);
 //app.use('/coach', usersRouter);
 
-
 app.listen(port, () => console.log(`The server is running on port: ${port}`));
